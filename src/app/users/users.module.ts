@@ -28,7 +28,7 @@ import { CalendarModule } from 'primeng/calendar';
     MultiSelectModule,
     CheckboxModule,
     KeyFilterModule,
-    CalendarModule
+    CalendarModule,
   ]
 })
 export class UsersModule { }
