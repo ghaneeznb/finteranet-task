@@ -14,6 +14,6 @@ export class UsersService {
   ) { }
 
   getUsers(): Observable<{ users: Array<IUser> }> {
-    return this.http.get<{ users: Array<IUser> }>(this.apiURL + '/users');
+    return this.http.get<{ users: Array<IUser> }>(this.apiURL + '/users?skip=0&limit=100');
   }
 }

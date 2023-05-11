@@ -6,6 +6,11 @@ import { UsersRoutingModule } from './users-routing.module';
 import { UsersListComponent } from './components/users-list/users-list.component';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CheckboxModule } from 'primeng/checkbox';
+import { KeyFilterModule } from 'primeng/keyfilter';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -19,6 +24,11 @@ import { ButtonModule } from 'primeng/button';
     UsersRoutingModule,
     TableModule,
     ButtonModule,
+    InputTextModule,
+    MultiSelectModule,
+    CheckboxModule,
+    KeyFilterModule,
+    CalendarModule
   ]
 })
 export class UsersModule { }
