@@ -9,11 +9,6 @@ export const GetAllUserSelector = createSelector(
     (state: IUserState) => state.items
 );
 
-export const GetSelectedUserSelector = createSelector(
-    selectUser,
-    (state: IUserState) => state.selected
-);
-
 export const GetErrorUserSelector = createSelector(
     selectUser,
     (state: IUserState) => state.error

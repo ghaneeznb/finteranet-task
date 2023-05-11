@@ -7,7 +7,3 @@ export interface IAppState {
 export const initialAppState: IAppState = {
     users: initialUsersState,
 };
-
-export function getInitialState(): IAppState {
-    return initialAppState;
-}

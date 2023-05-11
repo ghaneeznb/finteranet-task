@@ -6,7 +6,6 @@ const UsersReducerInternal = createReducer(
     initialUsersState,
     on(GetUsersAction, (state) => ({
         ...state,
-        selected: null,
         error: '',
         success: '',
     })),
