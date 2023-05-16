@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IUser } from '../../models/user.model';
 import { IAppState } from 'src/app/store/states/app.state';
 import { Store, select } from '@ngrx/store';
-import { GetAllUserSelector, GetUsersAction } from '../../stores/users';
+import { FilterUsersAction, GetAllUserSelector, GetFilterUserSelector, GetUsersAction } from '../../stores/users';
 import { Subscription } from 'rxjs';
 import { Table } from 'primeng/table';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-users-list',
@@ -12,21 +13,28 @@ import { Table } from 'primeng/table';
   styleUrls: ['./users-list.component.scss']
 })
 export class UsersListComponent implements OnInit, OnDestroy {
+  resourceUsers!: Array<IUser>;
   users!: Array<IUser>;
   getAllUserSelector$!: Subscription;
   searchValue: string = '';
-  gender: any[] = ['male', 'female', 'others', 'I prefer not to say'];
-  selectedGenders: any[] = [];
-  eyeColor: any[] = [];
+  genders: any[] = ['male', 'female', 'others', 'I prefer not to say'];
+  matchMode: any = ['equal', 'greater', 'smaller'];
+  eyeColor!: any[];
   birthDate!: Date[];
+  filtersVisible: boolean = false;
+  filterFormGroup!: FormGroup;
+  collapsed: boolean = true;
 
   constructor(
     private _store: Store<IAppState>,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
     this.usersSelector();
+    this.filtersUsersSelector();
     this.dispatchUsers();
+    this.createFormFilter();
   }
 
   ngOnDestroy(): void {
@@ -42,8 +50,27 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.getAllUserSelector$ = this._store.pipe(select(GetAllUserSelector)).subscribe(res => {
       if (res) {
         this.users = res;
+        this.resourceUsers = res;
         this.setEyeColor(res);
       }
+    });
+  }
+
+  private filtersUsersSelector() {
+    this.getAllUserSelector$ = this._store.pipe(select(GetFilterUserSelector)).subscribe(res => {
+      if (res) {
+        this.users = res;
+      }
+    });
+  }
+
+  private createFormFilter() {
+    this.filterFormGroup = this.fb.group({
+      selectedGender: [],
+      ageSelectedMode: 'equal',
+      age: 0,
+      eyeColor: [],
+      birthDate: null
     });
   }
 
@@ -53,6 +80,12 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   clearDtUser(table: Table) {
+    this.filterFormGroup.reset();
+    this.dispatchUsers();
     table.clear();
+  }
+
+  filterDtUser() {
+    this._store.dispatch(FilterUsersAction({ items: this.resourceUsers, payload: this.filterFormGroup.value }));
   }
 }

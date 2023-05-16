@@ -11,6 +11,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+import { SidebarModule } from 'primeng/sidebar';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { StyleClassModule } from 'primeng/styleclass';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
   declarations: [
@@ -29,6 +34,11 @@ import { CalendarModule } from 'primeng/calendar';
     CheckboxModule,
     KeyFilterModule,
     CalendarModule,
+    DropdownModule,
+    SidebarModule,
+    InputNumberModule,
+    StyleClassModule,
+    PanelModule
   ]
 })
 export class UsersModule { }

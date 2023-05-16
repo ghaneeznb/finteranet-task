@@ -18,3 +18,8 @@ export const GetSuccessUserSelector = createSelector(
     selectUser,
     (state: IUserState) => state.success
 );
+
+export const GetFilterUserSelector = createSelector(
+    selectUser,
+    (state: IUserState) => state.filteredUsers
+);

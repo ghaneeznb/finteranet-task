@@ -1,14 +1,66 @@
 <div class="card">
-    <p-table #dtUser data-name="dtUser" [value]="users" [paginator]="true" [rows]="10"
-        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['firstName', 'lastName']">
-        <ng-template pTemplate="caption">
-            <div class="flex">
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+    <p-sidebar [(visible)]="filtersVisible" position="left">
+        <ng-template pTemplate="header">
+            <h4>Add more filters</h4>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <form [formGroup]="filterFormGroup">
+                <p-panel header="Age" header="Gender" [toggleable]="true" class="my-4" [collapsed]="collapsed">
+                    <div *ngFor="let gender of genders" class="field-checkbox">
+                        <div class="d-flex flex-row gap-2 my-2">
+                            <p-checkbox formControlName="selectedGender" [value]="gender" [inputId]="gender">
+                            </p-checkbox>
+                            <label [for]="gender">{{ gender }}</label>
+                        </div>
+                    </div>
+                </p-panel>
+                <hr class="mx-2 my-4">
+                <p-panel header="Age" [toggleable]="true" [collapsed]="collapsed">
+                    <p-dropdown styleClass="p-inputtext-sm w-100 mb-2" [options]="matchMode"
+                        formControlName="ageSelectedMode">
+                    </p-dropdown>
+                    <p-inputNumber styleClass="p-inputtext-sm w-100" inputId="integernly" formControlName="age">
+                    </p-inputNumber>
+                </p-panel>
+                <hr class="mx-2 my-4">
+                <p-panel header="EyeColor" [toggleable]="true" [collapsed]="collapsed">
+                    <p-multiSelect styleClass="p-inputtext-sm w-100" [options]="eyeColor" formControlName="eyeColor"
+                        [filter]="false">
+                        <ng-template let-option pTemplate="item">
+                            <div class="inline-block vertical-align-middle">
+                                <span class="ml-1 mt-1">{{ option }}</span>
+                            </div>
+                        </ng-template>
+                    </p-multiSelect>
+                </p-panel>
+                <hr class="mx-2 my-4">
+                <p-panel header="BirthDate" [toggleable]="true" [collapsed]="collapsed">
+                    <p-calendar styleClass="p-inputtext-sm w-100" dateFormat="yy-mm-dd" [readonlyInput]="true"
+                        formControlName="birthDate" [showIcon]="true" selectionMode="range"></p-calendar>
+                </p-panel>
+            </form>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <div class="d-flex align-items-center justify-content-center">
+                <button pButton label="Filter" class="w-25 mx-2" (click)="filterDtUser()"></button>
+                <button pButton label="Clear" class="p-button-outlined w-25 mx-2"
                     (click)="clearDtUser(dtUser)"></button>
+            </div>
+        </ng-template>
+    </p-sidebar>
+    <p-table #dtUser data-name="dtUser" [value]="users" [paginator]="true" [rows]="10"
+        [rowsPerPageOptions]="[10, 20, 40]"
+        [globalFilterFields]="['firstName', 'lastName', 'age', 'gender', 'eyeColor', 'birthDate']">
+        <ng-template pTemplate="caption">
+            <div class="d-flex align-items-center justify-content-between">
+                <span class="ml-2">
+                    <p-button type="button" styleClass="p-button-outlined p-button-secondary"
+                        (click)="filtersVisible = true" icon="pi pi-filter" label="Add Filters"></p-button>
+                </span>
                 <span class="p-input-icon-left ml-auto">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" [(ngModel)]="searchValue"
-                        (input)="dtUser.filterGlobal(searchValue, 'contains')" placeholder="Search keyword" />
+                        (input)="dtUser.filterGlobal(searchValue, 'contains')" placeholder="Search FirstName..." />
                 </span>
             </div>
         </ng-template>
@@ -16,63 +68,12 @@
             <tr>
                 <th>FirstName</th>
                 <th>LastName</th>
-                <th>
-                    <div class="flex align-items-center">
-                        Age
-                        <p-columnFilter pKeyFilter="int" field="age" matchMode="in" display="menu"
-                            [showMatchModes]="true" [showOperator]="false" [showAddButton]="false"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Gender
-                        <p-columnFilter field="gender" matchMode="in" display="menu" [showMatchModes]="false"
-                            [showOperator]="false" [showAddButton]="false">
-                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                <p-multiSelect [ngModel]="value" [options]="gender" placeholder="Any"
-                                    (onChange)="filter($event.value)" [filter]="false">
-                                    <ng-template let-option pTemplate="item">
-                                        <div class="inline-block vertical-align-middle">
-                                            <span class="ml-1 mt-1">{{ option }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-multiSelect>
-                            </ng-template>
-                        </p-columnFilter>
-                    </div>
-                </th>
+                <th>Age</th>
+                <th>Gender</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>
-                    <div class="flex align-items-center">
-                        EyeColor
-                        <p-columnFilter field="eyeColor" matchMode="in" display="menu" [showMatchModes]="false"
-                            [showOperator]="false" [showAddButton]="false">
-                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                <p-multiSelect [ngModel]="value" [options]="eyeColor" placeholder="Any"
-                                    (onChange)="filter($event.value)" [filter]="false">
-                                    <ng-template let-option pTemplate="item">
-                                        <div class="inline-block vertical-align-middle">
-                                            <span class="ml-1 mt-1">{{ option }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-multiSelect>
-                            </ng-template>
-                        </p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        BirthDate
-                        <p-columnFilter type="date" field="birthDate" matchMode="in" display="menu"
-                            [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                            <ng-template pTemplate="filter" let-filter="filterCallback">
-                                <p-calendar (onSelect)="filter($event)" dateFormat="yy-mm-dd"
-                                    [readonlyInput]="true"></p-calendar>
-                            </ng-template>
-                        </p-columnFilter>
-                    </div>
-                </th>
+                <th>EyeColor</th>
+                <th>BirthDate</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
@@ -87,10 +88,5 @@
                 <td>{{ user.birthDate }}</td>
             </tr>
         </ng-template>
-        <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-        </ng-template>
-        <ng-template pTemplate="paginatorright">
-            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-        </ng-template>
     </p-table>
+</div>
